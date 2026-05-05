@@ -10,6 +10,7 @@ third_party_urls = [
 ]
 
 urlpatterns = [
+    path("api/", lambda request: HttpResponse("API OK")),
     path("api/classification/", include("apps.classefication.urls")),
     path("api/diabetic-detection/", include("apps.DiabeticDetection.urls")),
     # Health check endpoint

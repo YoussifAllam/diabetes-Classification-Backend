@@ -12,11 +12,6 @@ from rest_framework.views import APIView
 from .serializers.InputSerializers import DiabeticFootUlcerImageSerializer
 from .serializers.OutputSerializers import DiabeticFootUlcerPredictionSerializer
 
-try:
-    import tensorflow as tf
-except ImportError:  # pragma: no cover
-    tf = None
-
 # Same order as TensorFlow image_dataset_from_directory (sorted folder names under Patches/)
 CLASS_LABELS = ["Abnormal", "Normal"]
 
@@ -29,13 +24,20 @@ class DiabeticFootUlcerPredictView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     _model = None
 
+    @staticmethod
+    def _get_tf():
+        try:
+            import tensorflow as tf  # Imported lazily to reduce startup memory pressure.
+        except ImportError as exc:  # pragma: no cover
+            raise RuntimeError(
+                "tensorflow is not installed. Add it to requirements and reinstall."
+            ) from exc
+        return tf
+
     @classmethod
     def _get_model(cls):
         if cls._model is None:
-            if tf is None:
-                raise RuntimeError(
-                    "tensorflow is not installed. Add it to requirements and reinstall."
-                )
+            tf = cls._get_tf()
             model_path = Path(settings.BASE_DIR) / "static" / "model.h5"
             cls._model = tf.keras.models.load_model(
                 model_path,
