@@ -35,6 +35,7 @@ services:
       - OMP_NUM_THREADS=1
       - TF_NUM_INTRAOP_THREADS=1
       - TF_NUM_INTEROP_THREADS=1
+      - ENABLE_DFU_MODEL=false
     ports:
       - "8000:8000"
     healthcheck:

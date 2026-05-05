@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 import numpy as np
 from django.conf import settings
@@ -6,7 +7,7 @@ from PIL import Image
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_503_SERVICE_UNAVAILABLE
 from rest_framework.views import APIView
 
 from .serializers.InputSerializers import DiabeticFootUlcerImageSerializer
@@ -23,6 +24,11 @@ class DiabeticFootUlcerPredictView(APIView):
 
     parser_classes = (MultiPartParser, FormParser)
     _model = None
+
+    @staticmethod
+    def _is_enabled() -> bool:
+        # Prevent hard crashes on CPUs that cannot execute TensorFlow instructions.
+        return os.environ.get("ENABLE_DFU_MODEL", "false").strip().lower() in {"1", "true", "yes", "on"}
 
     @staticmethod
     def _get_tf():
@@ -47,6 +53,17 @@ class DiabeticFootUlcerPredictView(APIView):
         return cls._model
 
     def post(self, request: Request) -> Response:
+        if not self._is_enabled():
+            return Response(
+                {
+                    "detail": (
+                        "DFU model inference is disabled on this server. "
+                        "Set ENABLE_DFU_MODEL=true only on a host with TensorFlow-compatible CPU instructions."
+                    )
+                },
+                status=HTTP_503_SERVICE_UNAVAILABLE,
+            )
+
         input_serializer = DiabeticFootUlcerImageSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
         upload = input_serializer.validated_data["image"]
