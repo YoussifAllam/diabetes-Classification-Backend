@@ -32,6 +32,9 @@ services:
       - DJANGO_SETTINGS_MODULE=config.django
       - PYTHONUNBUFFERED=1  # Better logging
       - PYTHONDONTWRITEBYTECODE=1  # Don't create .pyc files
+      - OMP_NUM_THREADS=1
+      - TF_NUM_INTRAOP_THREADS=1
+      - TF_NUM_INTEROP_THREADS=1
     ports:
       - "8000:8000"
     healthcheck:
