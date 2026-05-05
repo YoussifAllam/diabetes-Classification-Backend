@@ -1,0 +1,51 @@
+{
+  "info": {
+    "_postman_id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "name": "Diabetic foot ulcer — image predict",
+    "description": "POST multipart **image** upload for `/api/diabetic-detection/predict/`.\n\n**Import in Apidog:** Import → Postman → choose this file.\n\nSet variable **baseUrl** (e.g. `http://127.0.0.1:8000`).\n\nAfter import, open each request → **Body** → **form-data** → field **image**: attach a **JPEG** or **PNG** file (Postman/Apidog: choose “File” for that row and pick a local image).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "200 — predict (attach image)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "description": "Foot photo (RGB). Any size is resized server-side to 224×224.",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/api/diabetic-detection/predict/",
+        "description": "Successful response shape:\n```json\n{\n  \"prediction\": 0,\n  \"label\": \"Abnormal\",\n  \"confidence\": 0.82,\n  \"scores\": { \"Abnormal\": 0.82, \"Normal\": 0.18 }\n}\n```\n`prediction`: 0 = Abnormal (ulcer), 1 = Normal (healthy skin)."
+      },
+      "response": []
+    },
+    {
+      "name": "400 — missing image field",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{baseUrl}}/api/diabetic-detection/predict/",
+        "description": "Multipart body with **no** `image` field → serializer error on `image` (required)."
+      },
+      "response": []
+    }
+  ]
+}

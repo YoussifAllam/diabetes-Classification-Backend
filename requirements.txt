@@ -111,3 +111,7 @@ django-user-agents
 django-cacheops
 # django-seed
 Faker
+joblib
+numpy
+scikit-learn
+tensorflow>=2.14,<2.18

@@ -10,22 +10,8 @@ third_party_urls = [
 ]
 
 urlpatterns = [
-    path("api/", include("apps.Users.urls")),
-    path("api/registertion/", include("apps.registertion.urls")),
-    path("api/transactions_log/", include("apps.TransactionsLog.urls")),
-    path("api/projects/", include("apps.Projects.urls")),
-    path("api/notifications/", include("apps.Notifications.urls")),
-    path("api/expenses/", include("apps.Expenses.urls")),
-    path("api/company_assets/", include("apps.CompanyAssets.urls")),
-    path("api/safe/", include("apps.Safe.urls")),
-    path("api/suppliers/", include("apps.Suppliers.urls")),
-    path("api/quotations/", include("apps.Quotations.urls")),
-    path("api/materials_suppliers/", include("apps.MaterialsSuppliers.urls")),
-    path("api/clients/", include("apps.Clients.urls")),
-    path("api/dashboard/", include("apps.Dashboard.urls")),
-    path("api/campaine/", include("apps.Campaine.urls")),
-    path("api/app-version/", include("apps.AppVersion.urls")),
     path("api/classification/", include("apps.classefication.urls")),
+    path("api/diabetic-detection/", include("apps.DiabeticDetection.urls")),
     # Health check endpoint
     path("health/", lambda request: HttpResponse("OK")),
 ] + third_party_urls  # noqa

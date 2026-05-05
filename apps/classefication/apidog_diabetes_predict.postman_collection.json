@@ -1,0 +1,160 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Diabetes classification — predict",
+    "description": "POST /api/classification/predict/ — import this file into Apidog (Import → Postman). Set the collection variable `baseUrl` to your server (e.g. http://127.0.0.1:8000).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "200 — typical non-diabetic profile",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"male\",\n  \"age\": 32,\n  \"hypertension\": 0,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"never\",\n  \"bmi\": 22.5,\n  \"HbA1c_level\": 5.2,\n  \"blood_glucose_level\": 92\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "Young, normal BMI and glucose; expects prediction 0 with lower diabetes probability."
+      }
+    },
+    {
+      "name": "200 — higher-risk profile",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"female\",\n  \"age\": 58,\n  \"hypertension\": 1,\n  \"heart_disease\": 1,\n  \"smoking_history\": \"former\",\n  \"bmi\": 31.2,\n  \"HbA1c_level\": 7.8,\n  \"blood_glucose_level\": 168\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "Older age, comorbidities, elevated HbA1c and glucose."
+      }
+    },
+    {
+      "name": "200 — other gender, current smoker",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"other\",\n  \"age\": 41,\n  \"hypertension\": 0,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"current\",\n  \"bmi\": 26.0,\n  \"HbA1c_level\": 5.9,\n  \"blood_glucose_level\": 110\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "Covers gender `other` and smoking_history `current`."
+      }
+    },
+    {
+      "name": "200 — all smoking_history variants (batch reference)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"male\",\n  \"age\": 50,\n  \"hypertension\": 0,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"no info\",\n  \"bmi\": 27.0,\n  \"HbA1c_level\": 6.0,\n  \"blood_glucose_level\": 120\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "Use `no info` for smoking. Duplicate this request and change only `smoking_history` to: never | current | former | ever | not current"
+      }
+    },
+    {
+      "name": "400 — missing required field (hypertension)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"female\",\n  \"age\": 40,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"never\",\n  \"bmi\": 24.0,\n  \"HbA1c_level\": 5.4,\n  \"blood_glucose_level\": 100\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "DRF validation error: hypertension omitted."
+      }
+    },
+    {
+      "name": "400 — invalid gender",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"Male\",\n  \"age\": 40,\n  \"hypertension\": 0,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"never\",\n  \"bmi\": 24.0,\n  \"HbA1c_level\": 5.4,\n  \"blood_glucose_level\": 100\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "API expects lowercase: male | female | other"
+      }
+    },
+    {
+      "name": "400 — invalid smoking_history",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"male\",\n  \"age\": 40,\n  \"hypertension\": 0,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"quit\",\n  \"bmi\": 24.0,\n  \"HbA1c_level\": 5.4,\n  \"blood_glucose_level\": 100\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "Allowed: never | no info | current | former | ever | not current"
+      }
+    },
+    {
+      "name": "400 — hypertension out of range",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"gender\": \"male\",\n  \"age\": 40,\n  \"hypertension\": 2,\n  \"heart_disease\": 0,\n  \"smoking_history\": \"never\",\n  \"bmi\": 24.0,\n  \"HbA1c_level\": 5.4,\n  \"blood_glucose_level\": 100\n}"
+        },
+        "url": "{{baseUrl}}/api/classification/predict/",
+        "description": "hypertension and heart_disease must be 0 or 1"
+      }
+    }
+  ]
+}

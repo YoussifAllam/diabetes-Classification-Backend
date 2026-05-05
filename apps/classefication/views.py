@@ -1,6 +1,6 @@
 from pathlib import Path
-import pickle
 
+import joblib
 import numpy as np
 from django.conf import settings
 from rest_framework.request import Request
@@ -35,8 +35,7 @@ class DiabetesPredictionView(APIView):
     def _get_model(cls):
         if cls._model is None:
             model_path = Path(settings.BASE_DIR) / "static" / "best_diabetes_model.pkl"
-            with model_path.open("rb") as model_file:
-                cls._model = pickle.load(model_file)
+            cls._model = joblib.load(model_path)
         return cls._model
 
     def post(self, request: Request) -> Response:

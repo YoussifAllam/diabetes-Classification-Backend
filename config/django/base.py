@@ -43,9 +43,7 @@ THIRD_PARTY_APPS = [
     "cacheops",
 ]
 
-LOCAL_APPS = [
-    "apps.TransactionsLog",
-]
+LOCAL_APPS = ["apps.classefication", "apps.DiabeticDetection"]
 
 
 INSTALLED_APPS = THIRD_PARTY_APPS + DEFAULT_APPS + LOCAL_APPS
@@ -150,18 +148,20 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 # WSGI_APPLICATION = "config.wsgi.application"
 
 
-from config.settings.celery import *  # noqa
+# from config.settings.celery import *  # noqa
 from config.settings.cors import *  # noqa
 from config.settings.sessions import *  # noqa
 from config.settings.email_sending import *  # noqa
 from config.settings.logger import *  # noqa: F403 F401 E402
-from config.settings.CKEDITOR5 import *  # noqa
-from config.settings.Unfold import *  # noqa
+
+# rom config.settings.CKEDITOR5 import *  # noqa
+# from config.settings.Unfold import *  # noqa
 from config.settings.admin import *  # noqa
 from config.settings.DRF import *  # noqa
 from config.settings.aws import *  # noqa
 from config.settings.google import *  # google settings # noqa
-from config.settings.SPECTACULAR import *  # noqa
-from config.settings.Cache import *  # noqa
+
+# from config.settings.SPECTACULAR import *  # noqa
+# from config.settings.Cache import *  # noqa
 from config.settings.DB_config import *  # noqa
 from config.settings.JWT import *  # noqa

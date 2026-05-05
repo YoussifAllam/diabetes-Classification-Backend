@@ -1,0 +1,160 @@
+{
+  "endpoint": "POST /api/classification/predict/",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "test_cases": [
+    {
+      "name": "200_typical_low_risk",
+      "expect_status": 200,
+      "body": {
+        "gender": "male",
+        "age": 32,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "never",
+        "bmi": 22.5,
+        "HbA1c_level": 5.2,
+        "blood_glucose_level": 92
+      }
+    },
+    {
+      "name": "200_higher_risk",
+      "expect_status": 200,
+      "body": {
+        "gender": "female",
+        "age": 58,
+        "hypertension": 1,
+        "heart_disease": 1,
+        "smoking_history": "former",
+        "bmi": 31.2,
+        "HbA1c_level": 7.8,
+        "blood_glucose_level": 168
+      }
+    },
+    {
+      "name": "200_other_gender_current_smoker",
+      "expect_status": 200,
+      "body": {
+        "gender": "other",
+        "age": 41,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "current",
+        "bmi": 26.0,
+        "HbA1c_level": 5.9,
+        "blood_glucose_level": 110
+      }
+    },
+    {
+      "name": "200_smoking_no_info",
+      "expect_status": 200,
+      "body": {
+        "gender": "male",
+        "age": 50,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "no info",
+        "bmi": 27.0,
+        "HbA1c_level": 6.0,
+        "blood_glucose_level": 120
+      }
+    },
+    {
+      "name": "200_smoking_ever",
+      "expect_status": 200,
+      "body": {
+        "gender": "female",
+        "age": 47,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "ever",
+        "bmi": 28.5,
+        "HbA1c_level": 6.2,
+        "blood_glucose_level": 125
+      }
+    },
+    {
+      "name": "200_smoking_not_current",
+      "expect_status": 200,
+      "body": {
+        "gender": "male",
+        "age": 55,
+        "hypertension": 1,
+        "heart_disease": 0,
+        "smoking_history": "not current",
+        "bmi": 29.0,
+        "HbA1c_level": 6.5,
+        "blood_glucose_level": 135
+      }
+    },
+    {
+      "name": "400_missing_hypertension",
+      "expect_status": 400,
+      "body": {
+        "gender": "female",
+        "age": 40,
+        "heart_disease": 0,
+        "smoking_history": "never",
+        "bmi": 24.0,
+        "HbA1c_level": 5.4,
+        "blood_glucose_level": 100
+      }
+    },
+    {
+      "name": "400_invalid_gender_casing",
+      "expect_status": 400,
+      "body": {
+        "gender": "Male",
+        "age": 40,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "never",
+        "bmi": 24.0,
+        "HbA1c_level": 5.4,
+        "blood_glucose_level": 100
+      }
+    },
+    {
+      "name": "400_invalid_smoking_history",
+      "expect_status": 400,
+      "body": {
+        "gender": "male",
+        "age": 40,
+        "hypertension": 0,
+        "heart_disease": 0,
+        "smoking_history": "quit",
+        "bmi": 24.0,
+        "HbA1c_level": 5.4,
+        "blood_glucose_level": 100
+      }
+    },
+    {
+      "name": "400_hypertension_out_of_range",
+      "expect_status": 400,
+      "body": {
+        "gender": "male",
+        "age": 40,
+        "hypertension": 2,
+        "heart_disease": 0,
+        "smoking_history": "never",
+        "bmi": 24.0,
+        "HbA1c_level": 5.4,
+        "blood_glucose_level": 100
+      }
+    }
+  ],
+  "field_rules": {
+    "gender": ["male", "female", "other"],
+    "hypertension": [0, 1],
+    "heart_disease": [0, 1],
+    "smoking_history": [
+      "never",
+      "no info",
+      "current",
+      "former",
+      "ever",
+      "not current"
+    ]
+  }
+}
